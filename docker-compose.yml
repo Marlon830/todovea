@@ -1,0 +1,19 @@
+services:
+  server_db:
+    env_file: ".env"
+    image: mongo
+    restart: always
+    container_name: server_db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
+    ports:
+      - "52807:27017"
+    expose:
+      - "52807"
+    networks:
+      - persist
+
+networks:
+  persist:
