@@ -17,9 +17,9 @@ export class AuthService {
     if (user && (await bcrypt.compare(password, user.password))) {
       const payload = { username: user.username, id: user.id };
       const expireTime = stayConnected ? '90d' : '24h';
-      const accessToken = this.jwtService.sign(payload, { expiresIn: expireTime });
+      const accessToken = this.jwtService.sign(payload, { secret: process.env.JWT_SECRET ?? 'very_secret_string', expiresIn: expireTime });
       return {
-        token: accessToken,
+        todovea_auth_token: accessToken,
         expiresIn: expireTime
       };
     }
@@ -27,6 +27,10 @@ export class AuthService {
   }
 
   validateUser(token: string): boolean {
-    return this.jwtService.verify(token) ? true : false;
+    try {
+      return this.jwtService.verify(token, { secret: process.env.JWT_SECRET ?? 'very_secret_string' }) ? true : false;
+    } catch (error) {
+      return false;
+    }
   }
 }
