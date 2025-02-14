@@ -2,15 +2,17 @@ import { Controller, Get, Put, Delete, Body, Param, UseGuards } from '@nestjs/co
 import { UserService } from './user.service';
 import { User } from './schemas/user.schema';
 import { UserGuard } from './user.guard';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-//   @Get()
-//   async findAll(): Promise<User[]> {
-//     return this.userService.findAll();
-//   }
+  @UseGuards(AuthGuard)
+  @Get()
+  async findAll(): Promise<User[]> {
+    return this.userService.findAll();
+  }
 
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<User> {
