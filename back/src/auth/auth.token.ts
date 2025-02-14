@@ -1,4 +1,4 @@
 export interface AuthToken {
-    token: string;
+    todovea_auth_token: string;
     expiresIn: string;
 }
