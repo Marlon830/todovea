@@ -1,23 +1,26 @@
-
 import {
   CanActivate,
   ExecutionContext,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
+import { TodoService } from './todo.service';
+import { Todo } from './schemas/todo.schema';
+import { Types } from 'mongoose';
 
 @Injectable()
-export class AuthGuard implements CanActivate {
-  constructor(private jwtService: JwtService) { }
+export class TodoGuard implements CanActivate {
+  constructor(
+    private todoService: TodoService,
+  ) { }
 
   private extractTokenFromHeader(request: Request): string | undefined {
     const [type, token] = request.headers.authorization?.split(' ') ?? [];
     return type === 'Bearer' ? token : undefined;
   }
 
-  canActivate(context: ExecutionContext): boolean {
+  async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
     const token = this.extractTokenFromHeader(request);
 
@@ -25,15 +28,13 @@ export class AuthGuard implements CanActivate {
       throw new UnauthorizedException();
     }
     try {
-      this.jwtService.verify(
-        token,
-        {
-          secret: process.env.JWT_SECRET ?? 'very_secret_string',
-        }
-      );
+      const allTodosAssigned: Todo[] = await this.todoService.findAllTodosAssignedToUser(request['userId']);
+      if (allTodosAssigned.find(todo => todo.assignedUsers.includes(Types.ObjectId.createFromHexString(request.params.id)))) {
+        return true;
+      }
+      throw new UnauthorizedException();
     } catch {
       throw new UnauthorizedException();
     }
-    return true;
   }
 }

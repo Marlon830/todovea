@@ -1,6 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
-import { User } from '../../user/schemas/user.schema';
 import { TodoStatus } from '../todo.status';
 
 @Schema()

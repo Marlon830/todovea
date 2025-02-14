@@ -25,12 +25,4 @@ export class AuthService {
     }
     return null;
   }
-
-  validateUser(token: string): boolean {
-    try {
-      return this.jwtService.verify(token, { secret: process.env.JWT_SECRET ?? 'very_secret_string' }) ? true : false;
-    } catch (error) {
-      return false;
-    }
-  }
 }

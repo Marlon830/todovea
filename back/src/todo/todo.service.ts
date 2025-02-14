@@ -2,13 +2,18 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Todo } from './schemas/todo.schema';
+import { Types } from 'mongoose';
 
 @Injectable()
 export class TodoService {
   constructor(@InjectModel(Todo.name) private readonly todoModel: Model<Todo>) {}
 
-  async findAll(): Promise<Todo[]> {
-    return this.todoModel.find().exec();
+  async findAllTodosAssignedToUser(userId: string): Promise<Todo[]> {
+    return this.todoModel.find({ assignedUsers: Types.ObjectId.createFromHexString(userId) }).exec();
+  }
+
+  async findAllTodosOwnedByUser(userId: string): Promise<Todo[]> {
+    return this.todoModel.find({ owner: Types.ObjectId.createFromHexString(userId) }).exec();
   }
 
   async findOne(id: string): Promise<Todo> {
@@ -32,6 +37,18 @@ export class TodoService {
     if (!updatedTodo) {
       throw new NotFoundException('Todo not found');
     }
+    return updatedTodo;
+  }
+
+  async assignUser(id: string, userId: string): Promise<Todo> {
+    const updatedTodo = await this.todoModel.findById(id).exec();
+
+    if (!updatedTodo) {
+      throw new NotFoundException('Todo not found');
+    }
+    updatedTodo.isNew = false;
+    updatedTodo.assignedUsers.push(Types.ObjectId.createFromHexString(userId));
+    updatedTodo.save();
     return updatedTodo;
   }
 
