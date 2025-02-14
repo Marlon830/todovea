@@ -27,9 +27,11 @@ import {
       if (!token) {
         throw new UnauthorizedException();
       }
+      // This throws a notfound exception if the todo is not found
+      await this.todoService.findOne(request.params.id);
       try {
         const allTodosOwned: Todo[] = await this.todoService.findAllTodosOwnedByUser(request['userId']);
-        if (allTodosOwned.find(todo => todo.owner.toString() === request.params.id)) {
+        if (allTodosOwned.find(todo => todo.id === request.params.id)) {
             return true;
         }
         throw new UnauthorizedException();

@@ -9,11 +9,11 @@ export class TodoService {
   constructor(@InjectModel(Todo.name) private readonly todoModel: Model<Todo>) {}
 
   async findAllTodosAssignedToUser(userId: string): Promise<Todo[]> {
-    return this.todoModel.find({ assignedUsers: Types.ObjectId.createFromHexString(userId) }).exec();
+    return await this.todoModel.find({ assignedUsers: userId }).exec();
   }
 
   async findAllTodosOwnedByUser(userId: string): Promise<Todo[]> {
-    return this.todoModel.find({ owner: Types.ObjectId.createFromHexString(userId) }).exec();
+    return await this.todoModel.find({ owner: userId }).exec();
   }
 
   async findOne(id: string): Promise<Todo> {
@@ -28,10 +28,12 @@ export class TodoService {
   async create(todo: Todo): Promise<Todo> {
     const newTodo = new this.todoModel(todo);
 
-    return newTodo.save();
+    return await newTodo.save();
   }
 
   async update(id: string, todo: Todo): Promise<Todo> {
+    if (todo)
+      todo.lastModification = new Date();
     const updatedTodo = await this.todoModel.findByIdAndUpdate(id, todo, { new: true }).exec();
 
     if (!updatedTodo) {
@@ -48,11 +50,11 @@ export class TodoService {
     }
     updatedTodo.isNew = false;
     updatedTodo.assignedUsers.push(Types.ObjectId.createFromHexString(userId));
-    updatedTodo.save();
+    await updatedTodo.save();
     return updatedTodo;
   }
 
   async delete(id: string): Promise<any> {
-    return this.todoModel.findByIdAndDelete(id).exec();
+    return await this.todoModel.findByIdAndDelete(id).exec();
   }
 }

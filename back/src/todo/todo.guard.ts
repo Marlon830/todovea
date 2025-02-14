@@ -29,7 +29,7 @@ export class TodoGuard implements CanActivate {
     }
     try {
       const allTodosAssigned: Todo[] = await this.todoService.findAllTodosAssignedToUser(request['userId']);
-      if (allTodosAssigned.find(todo => todo.assignedUsers.includes(Types.ObjectId.createFromHexString(request.params.id)))) {
+      if (allTodosAssigned.find(todo => todo.id === request.params.id)) {
         return true;
       }
       throw new UnauthorizedException();

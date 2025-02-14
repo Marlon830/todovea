@@ -11,29 +11,29 @@ export class TodoController {
   @Get()
   async getMyTodos(@Req() req: Request): Promise<Todo[]> {
     const userId = req['userId'];
-    return this.todoService.findAllTodosAssignedToUser(userId);
+    return await this.todoService.findAllTodosAssignedToUser(userId);
   }
 
   @Post()
   async create(@Body() todo: Todo): Promise<Todo> {
-    return this.todoService.create(todo);
+    return await this.todoService.create(todo);
   }
 
   @UseGuards(TodoGuard)
   @Put(':id')
   async update(@Param('id') id: string, @Body() todo: Todo): Promise<Todo> {
-    return this.todoService.update(id, todo);
+    return await this.todoService.update(id, todo);
   }
   
   @UseGuards(TodoGuard)
   @Put('assign/:id')
   async assignUser(@Param('id') id: string, @Body('userId') userId: string): Promise<Todo> {
-    return this.todoService.assignUser(id, userId);
+    return await this.todoService.assignUser(id, userId);
   }
 
   @UseGuards(TodoOwnerGuard)
   @Delete(':id')
   async delete(@Param('id') id: string): Promise<any> {
-    return this.todoService.delete(id);
+    return await this.todoService.delete(id);
   }
 }

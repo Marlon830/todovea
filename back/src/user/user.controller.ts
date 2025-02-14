@@ -11,23 +11,23 @@ export class UserController {
   @UseGuards(AuthGuard)
   @Get()
   async findAll(): Promise<User[]> {
-    return this.userService.findAll();
+    return await this.userService.findAll();
   }
 
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<User> {
-    return this.userService.findOneById(id);
+    return await this.userService.findOneById(id);
   }
 
   @UseGuards(UserGuard)
   @Put(':id')
   async update(@Param('id') id: string, @Body() user: User): Promise<User> {
-    return this.userService.update(id, user);
+    return await this.userService.update(id, user);
   }
 
   @UseGuards(UserGuard)
   @Delete(':id')
   async delete(@Param('id') id: string): Promise<any> {
-    return this.userService.delete(id);
+    return await this.userService.delete(id);
   }
 }

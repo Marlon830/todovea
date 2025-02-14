@@ -9,7 +9,7 @@ export class UserService {
   constructor(@InjectModel(User.name) private readonly userModel: Model<User>) {}
 
   async findAll(): Promise<User[]> {
-    return this.userModel.find().exec();
+    return await this.userModel.find().exec();
   }
 
   async findOneById(id: string): Promise<User> {
@@ -41,7 +41,7 @@ export class UserService {
     const newUser = new this.userModel(user);
 
     newUser.password = hashedPassword;
-    return newUser.save();
+    return await newUser.save();
   }
 
   async update(id: string, user: User): Promise<User> {
@@ -54,6 +54,6 @@ export class UserService {
   }
 
   async delete(id: string): Promise<any> {
-    return this.userModel.findByIdAndDelete(id).exec();
+    return await this.userModel.findByIdAndDelete(id).exec();
   }
 }

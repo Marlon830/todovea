@@ -1,6 +1,5 @@
 export enum TodoStatus {
-    Pending = 'Pending',
+    Todo = 'Todo',
     InProgress = 'InProgress',
-    Completed = 'Completed',
-    Archived = 'Archived'
+    Completed = 'Completed'
 }
