@@ -3,17 +3,24 @@ services:
     env_file: ".env"
     image: mongo
     restart: always
-    container_name: server_db
+    container_name: todovea_db
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
       MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
     ports:
-      - "52807:27017"
+      - "27017:27017"
     expose:
-      - "52807"
-    networks:
-      - persist
+      - "27017"
 
-networks:
-  persist:
+  server_app:
+    build: ./back
+    env_file: "./back/.env"
+    restart: always
+    container_name: todovea_server_app
+    ports:
+      - "3000:3000"
+    expose:
+      - "3000"
+    depends_on:
+      - server_db
