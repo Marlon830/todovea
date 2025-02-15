@@ -22,6 +22,16 @@ For the technical test, I was tasked with creating the backend for a todo app us
 
 8. **Final Testing**: I conducted thorough testing of the todo functionalities to ensure everything was operational.
 
+## Dockerisation
+
+To ensure the back end could be easily deployed and run in different environments, I added Docker support:
+
+1. **Dockerfile for NestJS Server**: I created a Dockerfile for the NestJS server. This file defines the environment and dependencies required to run the server in a Docker container.
+
+2. **Docker Compose Configuration**: I modified the `docker-compose.yml` file to include the NestJS server and mongodb server. This setup allows for seamless orchestration of multiple containers, ensuring that the backend and the database work together correctly.
+
+By dockerising the server, I made it easier to deploy and run in various environments, ensuring consistency and reliability.
+
 ## Frontend Development
 
 After completing the backend, I moved on to developing the frontend for the todo app. Here are the steps I followed:
