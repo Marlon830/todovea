@@ -33,5 +33,12 @@ export const useUsers = () => {
     return response.data;
   };
 
-  return { getAllUsers, getUserById };
+  const getMe = async (): Promise<UserData> => {
+    axios.defaults.headers.common["Authorization"] = `Bearer ${cookies["todovea_auth_token"]}`;
+    const response = await axios.get(`${API_URL}/users/me`);
+
+    return response.data;
+  }
+
+  return { getAllUsers, getUserById, getMe };
 };

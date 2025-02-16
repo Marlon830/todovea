@@ -14,12 +14,14 @@ interface TodoItemProps {
 
 export default function TodoItem({ todo, onStatusChange, onDeleteChange, unassignedUsers, assignedUsers }: TodoItemProps) {
   const { updateTodo, assignTodo, deleteTodo } = useTodo();
-  const { getUserById } = useUsers();
+  const { getUserById, getMe } = useUsers();
   const [ownername, setOwnername] = useState<string>('');
+  const [myId, setMyId] = useState<string>('');
   const [title, setTitle] = useState(todo.title);
   const [description, setDescription] = useState(todo.description);
 
   getUserById(todo.owner).then(user => setOwnername(user.username));
+  getMe().then(user => setMyId(user._id));
 
   const handleStatusChange = async (event: SelectChangeEvent<TodoStatus>) => {
     const updatedTodo: TodoData = await updateTodo(todo._id, {
@@ -67,9 +69,11 @@ export default function TodoItem({ todo, onStatusChange, onDeleteChange, unassig
           <Button variant="contained" color="primary" onClick={handleUpdate}>
             Update
           </Button>
-          <IconButton color="error" onClick={handleDelete}>
-            <DeleteIcon />
-          </IconButton>
+            {todo.owner === myId && (
+            <IconButton color="error" onClick={handleDelete}>
+              <DeleteIcon />
+            </IconButton>
+            )}
         </Box>
         <TextField
           fullWidth
