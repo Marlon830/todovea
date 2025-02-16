@@ -15,7 +15,7 @@ export default function TodoListPage() {
   const [users, setUsers] = useState<UserData[]>([]);
   const { getAllUsers } = useUsers();
   const { logout } = useAuth();
-  const [cookies, setCookie, removeCookie] = useCookies(['todovea_auth_token'], {
+  const [cookies] = useCookies(['todovea_auth_token'], {
     doNotParse: true,
   });
   const router = useRouter();

@@ -8,7 +8,7 @@ import { useCookies } from 'react-cookie';
 
 export default function HomePage() {
   const router = useRouter();
-  const [cookies, setCookie, removeCookie] = useCookies(['todovea_auth_token'], {
+  const [cookies] = useCookies(['todovea_auth_token'], {
     doNotParse: true,
   });
 
@@ -29,7 +29,7 @@ export default function HomePage() {
         gap={2}
       >
         <Typography variant="h3" gutterBottom>
-          Bienvenue sur l'application de gestion de tâches
+          Bienvenue sur l&apos;application de gestion de tâches
         </Typography>
         <Link href="/login" passHref>
           <Button variant="contained" color="primary">

@@ -15,7 +15,7 @@ export interface UserData {
 }
 
 export const useUsers = () => {
-  const [cookies, setCookie, removeCookie] = useCookies(['todovea_auth_token'], {
+  const [cookies] = useCookies(['todovea_auth_token'], {
       doNotParse: true,
     });
 

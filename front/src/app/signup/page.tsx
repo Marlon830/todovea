@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { TextField, Button, Container, Typography, Box, Alert } from '@mui/material';
 import { useRouter } from 'next/navigation';
@@ -87,7 +87,7 @@ export default function SignUpPage() {
           </Box>
           <Box display="flex" justifyContent="center" mt={2}>
             <Button type="submit" variant="contained" color="primary">
-              S'inscrire
+              S&apos;inscrire
             </Button>
           </Box>
         </form>

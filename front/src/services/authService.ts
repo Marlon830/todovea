@@ -16,7 +16,7 @@ export interface LoginFormData {
 }
 
 export const useAuth = () => {
-  const [cookies, setCookie, removeCookie] = useCookies(['todovea_auth_token'], {
+  const [, setCookie, removeCookie] = useCookies(['todovea_auth_token'], {
     doNotParse: true,
   });
 

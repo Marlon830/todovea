@@ -21,7 +21,7 @@ export default function TodoItem({ todo, onStatusChange, onDeleteChange, unassig
   const [myId, setMyId] = useState<string>('');
   const [title, setTitle] = useState(todo.title);
   const [description, setDescription] = useState(todo.description);
-  const [cookies, setCookie, removeCookie] = useCookies(['todovea_auth_token'], {
+  const [cookies] = useCookies(['todovea_auth_token'], {
     doNotParse: true,
   });
   const router = useRouter();

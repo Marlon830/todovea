@@ -12,7 +12,7 @@ export default function LoginPage() {
   const router = useRouter();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const { createTodo } = useTodo();
-  const [cookies, setCookie, removeCookie] = useCookies(['todovea_auth_token'], {
+  const [cookies] = useCookies(['todovea_auth_token'], {
     doNotParse: true,
   });
 
