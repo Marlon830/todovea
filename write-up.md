@@ -40,4 +40,12 @@ After completing the backend, I moved on to developing the frontend for the todo
 
 2. **Project Initialization**: I started a new project with Next.js, setting up the initial structure and configuration.
 
+3. **Authentication Setup**: I began by setting up user authentication using the React Hook Form package. I read through the documentation to understand how to integrate it into my Next.js project and configured it accordingly. 
+
+4. **Bug Fixes in Backend**: During the authentication setup, I encountered some bugs in the backend. However, these issues were not very difficult to resolve, and I was able to fix them promptly.
+
+5. **Todo Dashboard Page**: After setting up authentication, I proceeded to develop the todo dashboard page. I used Material-UI (MUI) for all the components, which provided a consistent and visually appealing design. I started with the services to consume the backend API and then implemented the UI components and pages.
+
+6. **Continuous Bug Fixes**: Whenever I encountered bugs in the backend while working on the frontend, I addressed them immediately to ensure smooth functionality across the application.
+
 By following these steps, I successfully developed both the backend and frontend for the todo app, ensuring a fully functional and secure application.

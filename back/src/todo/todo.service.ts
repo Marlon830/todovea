@@ -9,11 +9,11 @@ export class TodoService {
   constructor(@InjectModel(Todo.name) private readonly todoModel: Model<Todo>) {}
 
   async findAllTodosAssignedToUser(userId: string): Promise<Todo[]> {
-    return await this.todoModel.find({ assignedUsers: userId }).exec();
+    return await this.todoModel.find({ assignedUsers: Types.ObjectId.createFromHexString(userId) }).exec();
   }
 
   async findAllTodosOwnedByUser(userId: string): Promise<Todo[]> {
-    return await this.todoModel.find({ owner: userId }).exec();
+    return await this.todoModel.find({ owner: Types.ObjectId.createFromHexString(userId) }).exec();
   }
 
   async findOne(id: string): Promise<Todo> {
@@ -25,16 +25,23 @@ export class TodoService {
     return todo;
   }
 
-  async create(todo: Todo): Promise<Todo> {
-    const newTodo = new this.todoModel(todo);
+  async create(todo: Todo, ownerId: string, assignedUserIds: string[]): Promise<Todo> {
+    const newTodo = new this.todoModel({
+      ...todo,
+      assignedUsers: assignedUserIds.map(userId => Types.ObjectId.createFromHexString(userId)),
+      owner: Types.ObjectId.createFromHexString(ownerId),
+    });
 
     return await newTodo.save();
   }
 
-  async update(id: string, todo: Todo): Promise<Todo> {
-    if (todo)
-      todo.lastModification = new Date();
-    const updatedTodo = await this.todoModel.findByIdAndUpdate(id, todo, { new: true }).exec();
+  async update(id: string, todo: Todo, ownerId: string, assignedUserIds: string[]): Promise<Todo> {
+    const updatedTodo = await this.todoModel.findByIdAndUpdate(id, {
+      ...todo,
+      assignedUsers: assignedUserIds.map(userId => Types.ObjectId.createFromHexString(userId)),
+      owner: Types.ObjectId.createFromHexString(ownerId),
+      lastModification: new Date(),
+    }, { new: true }).exec();
 
     if (!updatedTodo) {
       throw new NotFoundException('Todo not found');
@@ -42,14 +49,16 @@ export class TodoService {
     return updatedTodo;
   }
 
-  async assignUser(id: string, userId: string): Promise<Todo> {
+  async assignUsers(id: string, userIds: string[]): Promise<Todo> {
     const updatedTodo = await this.todoModel.findById(id).exec();
 
     if (!updatedTodo) {
       throw new NotFoundException('Todo not found');
     }
     updatedTodo.isNew = false;
-    updatedTodo.assignedUsers.push(Types.ObjectId.createFromHexString(userId));
+    userIds.forEach(userId => {
+      updatedTodo.assignedUsers.push(Types.ObjectId.createFromHexString(userId));
+    });
     await updatedTodo.save();
     return updatedTodo;
   }

@@ -11,24 +11,31 @@ export class TodoController {
   @Get()
   async getMyTodos(@Req() req: Request): Promise<Todo[]> {
     const userId = req['userId'];
-    return await this.todoService.findAllTodosAssignedToUser(userId);
+    const assignedTodos = await this.todoService.findAllTodosAssignedToUser(userId);
+    const ownedTodos = await this.todoService.findAllTodosOwnedByUser(userId);
+    const todosToSend = assignedTodos.concat(ownedTodos);
+    const uniqueTodos = todosToSend.filter((todo, index, self) =>
+      self.findIndex(t => t.id === todo.id) === index
+    );
+    return uniqueTodos;
   }
 
   @Post()
-  async create(@Body() todo: Todo): Promise<Todo> {
-    return await this.todoService.create(todo);
+  async create(@Req() req: Request, @Body() todo: Todo, @Body('assignedUsers') assignedUsers: string[]): Promise<Todo> {
+    const ownerId = req['userId'];
+    return await this.todoService.create(todo, ownerId, assignedUsers);
   }
-
+  
   @UseGuards(TodoGuard)
   @Put(':id')
-  async update(@Param('id') id: string, @Body() todo: Todo): Promise<Todo> {
-    return await this.todoService.update(id, todo);
+  async update(@Param('id') id: string, @Body() todo: Todo, @Body('owner') ownerId: string, @Body('assignedUsers') assignedUsers: string[]): Promise<Todo> {
+    return await this.todoService.update(id, todo, ownerId, assignedUsers);
   }
   
   @UseGuards(TodoGuard)
   @Put('assign/:id')
-  async assignUser(@Param('id') id: string, @Body('userId') userId: string): Promise<Todo> {
-    return await this.todoService.assignUser(id, userId);
+  async assignUsers(@Param('id') id: string, @Body('userIds') userIds: string[]): Promise<Todo> {
+    return await this.todoService.assignUsers(id, userIds);
   }
 
   @UseGuards(TodoOwnerGuard)

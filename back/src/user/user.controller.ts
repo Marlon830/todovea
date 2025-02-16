@@ -1,4 +1,4 @@
-import { Controller, Get, Put, Delete, Body, Param, UseGuards } from '@nestjs/common';
+import { Controller, Get, Put, Delete, Body, Param, UseGuards, Req } from '@nestjs/common';
 import { UserService } from './user.service';
 import { User } from './schemas/user.schema';
 import { UserGuard } from './user.guard';
@@ -14,6 +14,14 @@ export class UserController {
     return await this.userService.findAll();
   }
 
+  @UseGuards(AuthGuard)
+  @Get('me')
+  async findMe(@Req() req: Request): Promise<User> {
+    const userId = req['userId'];
+    return await this.userService.findOneById(userId);
+  }
+
+  @UseGuards(AuthGuard)
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<User> {
     return await this.userService.findOneById(id);

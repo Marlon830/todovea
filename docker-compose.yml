@@ -12,6 +12,8 @@ services:
       - "27017:27017"
     expose:
       - "27017"
+    volumes:
+      - mongodata:/data/db
 
   server_app:
     build: ./back
@@ -19,8 +21,24 @@ services:
     restart: always
     container_name: todovea_server_app
     ports:
+      - "8080:8080"
+    expose:
+      - "8080"
+    depends_on:
+      - server_db
+
+  front_app:
+    build: ./front
+    env_file: "./front/.env"
+    restart: always
+    container_name: todovea_front_app
+    ports:
       - "3000:3000"
     expose:
       - "3000"
     depends_on:
-      - server_db
+      - server_app
+
+volumes:
+  mongodata:
+    driver: local

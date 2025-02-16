@@ -22,3 +22,36 @@ To start the project, follow these steps:
 ## Write-Up
 
 A detailed write-up of the project is also included in this repository.
+
+## Environment Setup
+
+To configure the environment, you need to create three `.env` files: one at the root of the project, one in the `back` folder, and one in the `front` folder.
+
+### Root `.env` file
+
+The root `.env` file should contain the following variables:
+
+```
+MONGO_INITDB_ROOT_USERNAME={mongodb-root-username}
+MONGO_INITDB_ROOT_PASSWORD={mongodb-root-password}
+MONGO_INITDB_DATABASE={mongodb-database}
+```
+
+### Back-end `.env` file
+
+The `back/.env` file should contain the following variables:
+
+```
+CONNECTION_STRING={mongodb-connection-string}
+JWT_SECRET={jwt-secret}
+PORT={server-port}
+FRONT_URL={front-url(for-cors)}
+```
+
+### Front-end `.env` file
+
+The `front/.env` file should contain the following variables:
+
+```
+NEXT_PUBLIC_API_URL={back-api-url}
+```

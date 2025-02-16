@@ -25,12 +25,15 @@ export class AuthGuard implements CanActivate {
       throw new UnauthorizedException();
     }
     try {
-      this.jwtService.verify(
+      const payload = this.jwtService.verify(
         token,
         {
           secret: process.env.JWT_SECRET ?? 'very_secret_string',
         }
       );
+      if (payload) {
+        request['userId'] = payload.id;
+      }
     } catch {
       throw new UnauthorizedException();
     }
