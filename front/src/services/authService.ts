@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useRouter } from "next/navigation";
 import { useCookies } from "react-cookie";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:1337";
@@ -19,6 +20,7 @@ export const useAuth = () => {
   const [cookies, setCookie, removeCookie] = useCookies(['todovea_auth_token'], {
     doNotParse: true,
   });
+  const router = useRouter();
 
   const signup = async (formData: SignupFormData) => {
     const response = await axios.post(`${API_URL}/auth/signup`, {
@@ -55,6 +57,7 @@ export const useAuth = () => {
   const logout = () => {
     removeCookie("todovea_auth_token");
     delete axios.defaults.headers.common["Authorization"];
+    router.push("/login");
   };
 
   return { signup, login, logout };
