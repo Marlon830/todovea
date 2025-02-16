@@ -12,6 +12,8 @@ services:
       - "27017:27017"
     expose:
       - "27017"
+    volumes:
+      - mongodata:/data/db
 
   server_app:
     build: ./back
@@ -24,3 +26,7 @@ services:
       - "8080"
     depends_on:
       - server_db
+
+volumes:
+  mongodata:
+    driver: local

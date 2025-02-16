@@ -14,6 +14,7 @@ export class UserController {
     return await this.userService.findAll();
   }
 
+  @UseGuards(AuthGuard)
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<User> {
     return await this.userService.findOneById(id);
