@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card, CardContent, Typography, FormControl, InputLabel, Select, MenuItem, SelectChangeEvent, List, ListItem, ListItemText, TextField, Button, Box, IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { TodoData, TodoStatus, useTodo } from '@/services/todoService';
 import { UserData, useUsers } from '@/services/usersService';
+import { useCookies } from 'react-cookie';
+import { useRouter } from 'next/navigation';
 
 interface TodoItemProps {
   todo: TodoData;
@@ -19,9 +21,29 @@ export default function TodoItem({ todo, onStatusChange, onDeleteChange, unassig
   const [myId, setMyId] = useState<string>('');
   const [title, setTitle] = useState(todo.title);
   const [description, setDescription] = useState(todo.description);
+  const [cookies, setCookie, removeCookie] = useCookies(['todovea_auth_token'], {
+    doNotParse: true,
+  });
+  const router = useRouter();
 
-  getUserById(todo.owner).then(user => setOwnername(user.username));
-  getMe().then(user => setMyId(user._id));
+  useEffect(() => {
+    if (!cookies["todovea_auth_token"]) {
+      router.push('/');
+    }
+
+    const fetchOwner = async () => {
+      const user = await getUserById(todo.owner);
+      setOwnername(user.username);
+    };
+
+    const fetchMe = async () => {
+      const user = await getMe();
+      setMyId(user._id);
+    };
+
+    fetchOwner();
+    fetchMe();
+  }, []);
 
   const handleStatusChange = async (event: SelectChangeEvent<TodoStatus>) => {
     const updatedTodo: TodoData = await updateTodo(todo._id, {
@@ -69,11 +91,11 @@ export default function TodoItem({ todo, onStatusChange, onDeleteChange, unassig
           <Button variant="contained" color="primary" onClick={handleUpdate}>
             Update
           </Button>
-            {todo.owner === myId && (
+          {todo.owner === myId && (
             <IconButton color="error" onClick={handleDelete}>
               <DeleteIcon />
             </IconButton>
-            )}
+          )}
         </Box>
         <TextField
           fullWidth

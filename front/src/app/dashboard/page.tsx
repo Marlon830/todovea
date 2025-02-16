@@ -61,6 +61,11 @@ export default function TodoListPage() {
     setTodos(prevTodos => prevTodos.filter(todo => todo._id !== deletedTodo._id));
   };
 
+  const handleLogoutButton = () => {
+    logout();
+    router.push('/login');
+  };
+
   return (
     <Container maxWidth={false} sx={{ padding: 0 }}>
       <Box
@@ -107,7 +112,7 @@ export default function TodoListPage() {
           </Grid2>
         </Grid2>
         <Box mx={4} display="flex" gap={2}>
-          <Button variant="contained" color="error" onClick={logout}>
+          <Button variant="contained" color="error" onClick={handleLogoutButton}>
             Logout
           </Button>
           <Button variant="contained" color="success" onClick={handleCreateTodoButton}>
