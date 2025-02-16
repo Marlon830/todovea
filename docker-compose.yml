@@ -27,6 +27,18 @@ services:
     depends_on:
       - server_db
 
+  front_app:
+    build: ./front
+    env_file: "./front/.env"
+    restart: always
+    container_name: todovea_front_app
+    ports:
+      - "3000:3000"
+    expose:
+      - "3000"
+    depends_on:
+      - server_app
+
 volumes:
   mongodata:
     driver: local
