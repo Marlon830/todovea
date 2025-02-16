@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
-import { Card, CardContent, Typography, FormControl, InputLabel, Select, MenuItem, SelectChangeEvent, List, ListItem, ListItemText, TextField, Button, Box } from '@mui/material';
+import { Card, CardContent, Typography, FormControl, InputLabel, Select, MenuItem, SelectChangeEvent, List, ListItem, ListItemText, TextField, Button, Box, IconButton } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { TodoData, TodoStatus, useTodo } from '@/services/todoService';
 import { UserData, useUsers } from '@/services/usersService';
 
 interface TodoItemProps {
   todo: TodoData;
   onStatusChange: (updatedTodo: TodoData) => void;
+  onDeleteChange: (deletedTodo: TodoData) => void;
   unassignedUsers: UserData[];
   assignedUsers: UserData[];
 }
 
-export default function TodoItem({ todo, onStatusChange, unassignedUsers, assignedUsers }: TodoItemProps) {
-  const { updateTodo, assignTodo } = useTodo();
+export default function TodoItem({ todo, onStatusChange, onDeleteChange, unassignedUsers, assignedUsers }: TodoItemProps) {
+  const { updateTodo, assignTodo, deleteTodo } = useTodo();
   const { getUserById } = useUsers();
   const [ownername, setOwnername] = useState<string>('');
   const [title, setTitle] = useState(todo.title);
@@ -41,6 +43,11 @@ export default function TodoItem({ todo, onStatusChange, unassignedUsers, assign
     onStatusChange(updatedTodo);
   };
 
+  const handleDelete = async () => {
+    await deleteTodo(todo._id);
+    onDeleteChange(todo);
+  };
+
   const menuProps = {
     PaperProps: {
       sx: {
@@ -54,12 +61,15 @@ export default function TodoItem({ todo, onStatusChange, unassignedUsers, assign
     <Card variant="outlined" sx={{ width: '100%', maxWidth: 400, backgroundColor: 'var(--foreground)', color: 'var(--background)' }}>
       <CardContent>
         <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
-          <Typography variant="h6" component="div">
+          <Typography variant="h6" component="div" sx={{ mr: 12 }}>
             Owner: {ownername}
           </Typography>
           <Button variant="contained" color="primary" onClick={handleUpdate}>
             Update
           </Button>
+          <IconButton color="error" onClick={handleDelete}>
+            <DeleteIcon />
+          </IconButton>
         </Box>
         <TextField
           fullWidth

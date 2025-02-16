@@ -57,6 +57,10 @@ export default function TodoListPage() {
     setTodos(prevTodos => prevTodos.map(todo => (todo._id === updatedTodo._id ? updatedTodo : todo)));
   };
 
+  const handleDeleteChange = (deletedTodo: TodoData) => {
+    setTodos(prevTodos => prevTodos.filter(todo => todo._id !== deletedTodo._id));
+  };
+
   return (
     <Container maxWidth={false} sx={{ padding: 0 }}>
       <Box
@@ -77,7 +81,7 @@ export default function TodoListPage() {
             </Typography>
             {todosByStatus(TodoStatus.Todo).map(todo => (
               <div className='mb-3'>
-                <TodoItem key={todo._id} todo={todo} onStatusChange={handleStatusChange} assignedUsers={users.filter(user => todo.assignedUsers.includes(user._id))} unassignedUsers={users.filter(user => !todo.assignedUsers.includes(user._id))} />
+                <TodoItem key={todo._id} todo={todo} onStatusChange={handleStatusChange} onDeleteChange={handleDeleteChange} assignedUsers={users.filter(user => todo.assignedUsers.includes(user._id))} unassignedUsers={users.filter(user => !todo.assignedUsers.includes(user._id))} />
               </div>
             ))}
           </Grid2>
@@ -87,7 +91,7 @@ export default function TodoListPage() {
             </Typography>
             {todosByStatus(TodoStatus.InProgress).map(todo => (
               <div className='mb-3'>
-                <TodoItem key={todo._id} todo={todo} onStatusChange={handleStatusChange} assignedUsers={users.filter(user => todo.assignedUsers.includes(user._id))} unassignedUsers={users.filter(user => !todo.assignedUsers.includes(user._id))} />
+                <TodoItem key={todo._id} todo={todo} onStatusChange={handleStatusChange} onDeleteChange={handleDeleteChange} assignedUsers={users.filter(user => todo.assignedUsers.includes(user._id))} unassignedUsers={users.filter(user => !todo.assignedUsers.includes(user._id))} />
               </div>
             ))}
           </Grid2>
@@ -97,7 +101,7 @@ export default function TodoListPage() {
             </Typography>
             {todosByStatus(TodoStatus.Completed).map(todo => (
               <div className='mb-3'>
-                <TodoItem key={todo._id} todo={todo} onStatusChange={handleStatusChange} assignedUsers={users.filter(user => todo.assignedUsers.includes(user._id))} unassignedUsers={users.filter(user => !todo.assignedUsers.includes(user._id))} />
+                <TodoItem key={todo._id} todo={todo} onStatusChange={handleStatusChange} onDeleteChange={handleDeleteChange} assignedUsers={users.filter(user => todo.assignedUsers.includes(user._id))} unassignedUsers={users.filter(user => !todo.assignedUsers.includes(user._id))} />
               </div>
             ))}
           </Grid2>
