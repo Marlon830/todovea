@@ -80,7 +80,7 @@ export default function TodoListPage() {
               Todo
             </Typography>
             {todosByStatus(TodoStatus.Todo).map(todo => (
-              <div className='mb-3'>
+              <div key={`div-todo-${todo._id}`} className='mb-3'>
                 <TodoItem key={todo._id} todo={todo} onStatusChange={handleStatusChange} onDeleteChange={handleDeleteChange} assignedUsers={users.filter(user => todo.assignedUsers.includes(user._id))} unassignedUsers={users.filter(user => !todo.assignedUsers.includes(user._id))} />
               </div>
             ))}
@@ -90,7 +90,7 @@ export default function TodoListPage() {
               In Progress
             </Typography>
             {todosByStatus(TodoStatus.InProgress).map(todo => (
-              <div className='mb-3'>
+              <div key={`div-todo-${todo._id}`} className='mb-3'>
                 <TodoItem key={todo._id} todo={todo} onStatusChange={handleStatusChange} onDeleteChange={handleDeleteChange} assignedUsers={users.filter(user => todo.assignedUsers.includes(user._id))} unassignedUsers={users.filter(user => !todo.assignedUsers.includes(user._id))} />
               </div>
             ))}
@@ -100,7 +100,7 @@ export default function TodoListPage() {
               Completed
             </Typography>
             {todosByStatus(TodoStatus.Completed).map(todo => (
-              <div className='mb-3'>
+              <div key={`div-todo-${todo._id}`} className='mb-3'>
                 <TodoItem key={todo._id} todo={todo} onStatusChange={handleStatusChange} onDeleteChange={handleDeleteChange} assignedUsers={users.filter(user => todo.assignedUsers.includes(user._id))} unassignedUsers={users.filter(user => !todo.assignedUsers.includes(user._id))} />
               </div>
             ))}
