@@ -1,0 +1,8 @@
+{
+    "rewrites": [
+        {
+            "source": "/api/:path*",
+            "destination": "http://testapp-alb-1213443673.eu-west-3.elb.amazonaws.com/:path*"
+        }
+    ]
+}
